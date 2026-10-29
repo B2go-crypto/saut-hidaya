@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sauti Hidaya - Islamic App</title>
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+<style>
+body{font-family:sans-serif;background:#0f172a;color:white;text-align:center;padding:20px}
+.card{background:#1e293b;padding:20px;border-radius:15px;margin:15px 0}
+button{background:#7c3aed;color:white;padding:15px 30px;border:none;border-radius:10px;font-size:18px;font-weight:bold}
+audio{width:100%;margin:10px 0}
+</style>
+</head>
+<body>
+<h1>🕌 Sauti Hidaya</h1>
+<p>Qur'an, Mawaidha na Dua - Sikiliza na Changia</p>
+
+<div class="card">
+<h3>📖 Qur'an Tukufu</h3>
+<audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+<p>Surat Al-Fatiha - Qari Mshary</p>
+</div>
+
+<div class="card">
+<h3>🎙️ Mawaidha</h3>
+<audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
+<p>Kusamehe katika Uislamu</p>
+</div>
+
+<div class="card">
+<h3>💜 Changia 1 Pi kwa Ajili ya Dini</h3>
+<p>Support Sauti Hidaya iendelee kutoa elimu bure</p>
+<button onclick="donatePi()">Changia 1 Pi 🙏</button>
+<p id="status"></p>
+</div>
+
+<script>
+const Pi = window.Pi;
+Pi.init({version:"2.0", sandbox:false});
+
+async function donatePi(){
+ document.getElementById('status').innerText="Inaunganisha Pi Wallet...";
+ try{
+  const auth = await Pi.authenticate(['payments'], (p)=>{});
+  const payment = await Pi.createPayment({
+   amount: 1,
+   memo: "Sadaqa kwa Sauti Hidaya",
+   metadata: {type:"donation"}
+  },{
+   onReadyForServerApproval: (id)=>{document.getElementById('status').innerText="Inathibitisha...";},
+   onReadyForServerCompletion: (id,tx)=>{document.getElementById('status').innerText="✅ Shukrani! Mungu akubariki! 1 Pi imepokelewa!";},
+   onCancel: ()=>{document.getElementById('status').innerText="Ume-cancel";},
+   onError: (e)=>{document.getElementById('status').innerText="Hitilafu: "+e.message;}
+  });
+ }catch(e){
+  document.getElementById('status').innerText="Fungua ndani ya Pi Browser!";
+  alert("Tafadhali fungua app hii ndani ya Pi Browser ili kuchangia");
+ }
+}
+</script>
+</body>
+</html>
