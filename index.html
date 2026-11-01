@@ -1,63 +1,34 @@
+
 <!DOCTYPE html>
 <html lang="sw">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sauti Hidaya - Islamic App</title>
+<title>Qur'an Sauti TZ - 114 Sura - Sheikh Mishary - BURE - Sadaqah MADRASA</title>
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 <style>
-body{font-family:sans-serif;background:#0f172a;color:white;text-align:center;padding:20px}
-.card{background:#1e293b;padding:20px;border-radius:15px;margin:15px 0}
-button{background:#7c3aed;color:white;padding:15px 30px;border:none;border-radius:10px;font-size:18px;font-weight:bold}
-audio{width:100%;margin:10px 0}
+:root{--green:#0B6A2B;--gold:#D4AF37;--bg:#f6faf7}
+body{margin:0;font-family:system-ui;background:var(--bg);color:#222;line-height:1.5}
+.header{background:var(--green);color:#fff;padding:14px;text-align:center;position:sticky;top:0;z-index:30}
+.free{background:#fff;color:var(--green);padding:6px 14px;border-radius:20px;font-weight:900;font-size:11px;margin-top:8px;display:inline-block}
+.langs button{padding:6px 12px;margin:3px;border:2px solid #fff;background:rgba(255,255,255,.2);color:#fff;border-radius:20px;font-weight:800;cursor:pointer}
+.langs button.active{background:#fff;color:var(--green)}
+.container{max-width:650px;margin:auto;padding:12px}
+.card{background:#fff;border-radius:16px;padding:14px;margin-top:14px;box-shadow:0 4px 18px rgba(0,0,0,.06);border-top:4px solid var(--green)}
+.card.madrasa{border-top-color:var(--gold);background:linear-gradient(#FFFBEB,#fff);border:2px solid var(--gold)}
+.card.attr{border-top-color:#0B6A2B;background:#e8f5e9;border:1px solid var(--green)}
+.btn{width:100%;padding:12px;border:none;border-radius:12px;font-weight:800;margin-top:8px;cursor:pointer}
+.btn-g{background:var(--green);color:#fff}.btn-y{background:var(--gold);color:#000}.btn-b{background:#111;color:var(--gold);border:1px solid var(--gold)}
+.surah{padding:10px;border:1px solid #eee;border-radius:10px;margin-top:6px;display:flex;justify-content:space-between;align-items:center;background:#fafafa}
+.surah.playing{background:#e8f5e9;border:2px solid var(--green);font-weight:700}
+.info{background:#FFFBEB;border-left:4px solid var(--gold);padding:10px;border-radius:8px;font-size:12px;margin-top:8px}
+.info-green{background:#e8f5e9;border-left:4px solid var(--green);padding:10px;border-radius:8px;font-size:11px;margin-top:8px}
+audio{width:100%;margin-top:8px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:50;padding:20px;overflow:auto}
+.modal>div{background:#fff;padding:16px;border-radius:16px;max-width:600px;margin:20px auto}
+.badge{background:var(--green);color:#fff;padding:2px 8px;border-radius:10px;font-size:10px}
 </style>
 </head>
 <body>
-<h1>🕌 Sauti Hidaya</h1>
-<p>Qur'an, Mawaidha na Dua - Sikiliza na Changia</p>
-
-<div class="card">
-<h3>📖 Qur'an Tukufu</h3>
-<audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-<p>Surat Al-Fatiha - Qari Mshary</p>
-</div>
-
-<div class="card">
-<h3>🎙️ Mawaidha</h3>
-<audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
-<p>Kusamehe katika Uislamu</p>
-</div>
-
-<div class="card">
-<h3>💜 Changia 1 Pi kwa Ajili ya Dini</h3>
-<p>Support Sauti Hidaya iendelee kutoa elimu bure</p>
-<button onclick="donatePi()">Changia 1 Pi 🙏</button>
-<p id="status"></p>
-</div>
-
-<script>
-const Pi = window.Pi;
-Pi.init({version:"2.0", sandbox:false});
-
-async function donatePi(){
- document.getElementById('status').innerText="Inaunganisha Pi Wallet...";
- try{
-  const auth = await Pi.authenticate(['payments'], (p)=>{});
-  const payment = await Pi.createPayment({
-   amount: 1,
-   memo: "Sadaqa kwa Sauti Hidaya",
-   metadata: {type:"donation"}
-  },{
-   onReadyForServerApproval: (id)=>{document.getElementById('status').innerText="Inathibitisha...";},
-   onReadyForServerCompletion: (id,tx)=>{document.getElementById('status').innerText="✅ Shukrani! Mungu akubariki! 1 Pi imepokelewa!";},
-   onCancel: ()=>{document.getElementById('status').innerText="Ume-cancel";},
-   onError: (e)=>{document.getElementById('status').innerText="Hitilafu: "+e.message;}
-  });
- }catch(e){
-  document.getElementById('status').innerText="Fungua ndani ya Pi Browser!";
-  alert("Tafadhali fungua app hii ndani ya Pi Browser ili kuchangia");
- }
-}
-</script>
-</body>
-</html>
+<div class="header">
+<div style="font-size:
