@@ -1,2 +1,65 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qur'an Sauti TZ - 114 Sura - Sheikh Mishary</title>
+<style>
+body{margin:0;font-family:system-ui;background:#f6faf7}
+.header{background:#0B6A2B;color:#fff;padding:14px;text-align:center;position:sticky;top:0;z-index:30}
+.card{background:#fff;border-radius:16px;padding:14px;margin:12px;box-shadow:0 4px 12px rgba(0,0,0,.06);border-top:4px solid #0B6A2B}
+.card.gold{border-top-color:#D4AF37;background:linear-gradient(#FFFBEB,#fff);border:2px solid #D4AF37}
+.surah{padding:10px;border:1px solid #eee;border-radius:10px;margin-top:6px;display:flex;justify-content:space-between;align-items:center;background:#fafafa}
+.surah.playing{background:#e8f5e9;border:2px solid #0B6A2B;font-weight:700}
+.btn{width:100%;padding:12px;border:none;border-radius:12px;font-weight:800;margin-top:8px;cursor:pointer}
+.btn-g{background:#0B6A2B;color:#fff}.btn-y{background:#D4AF37;color:#000}
+audio{width:100%;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="header">
+<div style="font-weight:900;font-size:19px">Qur'an Sauti TZ</div>
+<div style="font-size:11px">Sheikh Mishary Rashid Alafasy - 114 Sura Kamili - BURE</div>
+<div style="background:#fff;color:#0B6A2B;padding:5px 12px;border-radius:20px;font-weight:900;font-size:11px;display:inline-block;margin-top:6px">🎉 114 SURA ZOTE BURE - BILA MALIPO</div>
+<div style="font-size:10px;margin-top:4px">Source: cdn.islamic.network - Non-commercial - Willing to remove within 24h on request</div>
+</div>
 
-https://b2go-crypto.github.io/saut-hidaya/
+<div class="card" style="background:#e8f5e9;border:1px solid #0B6A2B">
+<b>🔊 Msemaji: Sheikh Mishary Rashid Alafasy</b><br>
+<span style="font-size:11px">Sauti hizi ni kwa Da'wah BURE Fi Sabilillah. Chanzo ni public CDN (Islamic Network) kwa elimu tu. Haki miliki ni mali ya Sheikh Mishary. Tunamheshimu. <b>Kama mmiliki hataridhia, TUPO TAYARI KUZIFUTA MARA MOJA ndani ya masaa 24 - Contact: GitHub Issues b2go-crypto.github.io</b></span>
+</div>
+
+<div class="card" style="position:sticky;top:95px;z-index:20">
+<b id="now">Chagua Sura hapa chini...</b>
+<audio id="player" controls controlsList="nodownload"></audio>
+<div style="display:flex;gap:6px"><button class="btn btn-g" style="flex:1" onclick="prev()">⏮ Nyuma</button><button class="btn btn-y" style="flex:1" onclick="next()">⏭ Mbele</button></div>
+<div style="font-size:11px;background:#FFFBEB;padding:8px;border-radius:8px;margin-top:6px" id="tafsir">Tafsir: Sikiliza sauti ya Sheikh Mishary - BURE 100%...</div>
+</div>
+
+<div class="card">
+<h3>📖 Sura 114 ZOTE - Sheikh Mishary</h3>
+<input id="search" placeholder="Tafuta: Ya-Sin, Kahf, Baqarah..." style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px" oninput="filterList()">
+<div id="list" style="max-height:500px;overflow:auto;margin-top:8px"></div>
+</div>
+
+<div class="card gold">
+<h3>🤲 SADAQAH - Walimu wa MADRASA, Yatima, Wajane</h3>
+<p style="font-size:12px"><b>Kaka... Unasikiliza Qur'an BURE 114 Sura, lakini Walimu wa MADRASA Dar wanafundisha bila mshahara, Yatima hana daftari, Mjane hana unga. App ni BURE 100%, ukipenda changia Sadaqah HIARI. Allah akulipe! Mtume ﷺ: Mimi na mlea Yatima kama hivi Peponi</b></p>
+<select id="sFor" style="width:100%;padding:10px;border-radius:8px"><option>📖 Walimu wa MADRASA</option><option>👶 Yatima</option><option>🧕 Wajane</option><option>🍞 Wenye Uhitaji</option></select>
+<select id="sAmt" style="width:100%;padding:10px;border-radius:8px;margin-top:6px"><option>1 Pi</option><option selected>2 Pi</option><option>5 Pi</option><option>10 Pi</option></select>
+<button class="btn btn-y" onclick="alert('Mashallah! Sadaqah yako ya '+document.getElementById('sAmt').value+' kwa '+document.getElementById('sFor').value+' - Allah akulipe! Kwa sasa lipa Test-Pi kwenye Pi Browser baada ya approval. Qur’an inabaki BURE 100% bila malipo.')">📖 Changia MADRASA/Yatima (Hiari)</button>
+<div style="font-size:10px;color:#666;text-align:center;margin-top:6px">💡 Qur'an inabaki BURE 100% hata usipochangia. Wallet: GDYOTJO6...66FO Testnet</div>
+</div>
+
+<script>
+const names=[[1,"Al-Fatiha"],[2,"Al-Baqarah"],[3,"Ali 'Imran"],[4,"An-Nisa"],[5,"Al-Ma'idah"],[6,"Al-An'am"],[7,"Al-A'raf"],[8,"Al-Anfal"],[9,"At-Tawbah"],[10,"Yunus"],[11,"Hud"],[12,"Yusuf"],[13,"Ar-Ra'd"],[14,"Ibrahim"],[15,"Al-Hijr"],[16,"An-Nahl"],[17,"Al-Isra"],[18,"Al-Kahf"],[19,"Maryam"],[20,"Ta-Ha"],[21,"Al-Anbiya"],[22,"Al-Hajj"],[23,"Al-Mu'minun"],[24,"An-Nur"],[25,"Al-Furqan"],[26,"Ash-Shu'ara"],[27,"An-Naml"],[28,"Al-Qasas"],[29,"Al-Ankabut"],[30,"Ar-Rum"],[31,"Luqman"],[32,"As-Sajdah"],[33,"Al-Ahzab"],[34,"Saba"],[35,"Fatir"],[36,"Ya-Sin"],[37,"As-Saffat"],[38,"Sad"],[39,"Az-Zumar"],[40,"Ghafir"],[41,"Fussilat"],[42,"Ash-Shura"],[43,"Az-Zukhruf"],[44,"Ad-Dukhan"],[45,"Al-Jathiyah"],[46,"Al-Ahqaf"],[47,"Muhammad"],[48,"Al-Fath"],[49,"Al-Hujurat"],[50,"Qaf"],[51,"Adh-Dhariyat"],[52,"At-Tur"],[53,"An-Najm"],[54,"Al-Qamar"],[55,"Ar-Rahman"],[56,"Al-Waqi'ah"],[57,"Al-Hadid"],[58,"Al-Mujadila"],[59,"Al-Hashr"],[60,"Al-Mumtahanah"],[61,"As-Saf"],[62,"Al-Jumu'ah"],[63,"Al-Munafiqun"],[64,"At-Taghabun"],[65,"At-Talaq"],[66,"At-Tahrim"],[67,"Al-Mulk"],[68,"Al-Qalam"],[69,"Al-Haqqah"],[70,"Al-Ma'arij"],[71,"Nuh"],[72,"Al-Jinn"],[73,"Al-Muzzammil"],[74,"Al-Muddathir"],[75,"Al-Qiyamah"],[76,"Al-Insan"],[77,"Al-Mursalat"],[78,"An-Naba"],[79,"An-Nazi'at"],[80,"Abasa"],[81,"At-Takwir"],[82,"Al-Infitar"],[83,"Al-Mutaffifin"],[84,"Al-Inshiqaq"],[85,"Al-Buruj"],[86,"At-Tariq"],[87,"Al-A'la"],[88,"Al-Ghashiyah"],[89,"Al-Fajr"],[90,"Al-Balad"],[91,"Ash-Shams"],[92,"Al-Lail"],[93,"Ad-Duha"],[94,"Ash-Sharh"],[95,"At-Tin"],[96,"Al-Alaq"],[97,"Al-Qadr"],[98,"Al-Bayyinah"],[99,"Az-Zalzalah"],[100,"Al-Adiyat"],[101,"Al-Qari'ah"],[102,"At-Takathur"],[103,"Al-Asr"],[104,"Al-Humazah"],[105,"Al-Fil"],[106,"Quraysh"],[107,"Al-Ma'un"],[108,"Al-Kawthar"],[109,"Al-Kafirun"],[110,"An-Nasr"],[111,"Al-Masad"],[112,"Al-Ikhlas"],[113,"Al-Falaq"],[114,"An-Nas"]];
+let surahs=names.map(n=>({id:n[0],name:n[0]+". "+n[1],url:`https://cdn.islamic.network/quran/audio/128/ar.alafasy/${n[0]}.mp3`}));
+let cur=0;
+function render(f=""){let c=document.getElementById('list');c.innerHTML="";surahs.forEach((s,i)=>{if(f && !s.name.toLowerCase().includes(f.toLowerCase()))return;let d=document.createElement('div');d.className='surah'+(i==cur?' playing':'');d.innerHTML=`<div><b>${s.name}</b><br><small>${s.id}/114 - Sheikh Mishary</small></div><button class="btn btn-g" style="width:auto;padding:6px 14px;margin:0" onclick="play(${i})">▶️</button>`;c.appendChild(d);});}
+function play(i){cur=i;let s=surahs[i];document.getElementById('now').innerText="🔊 Sasa: "+s.name+" - Sheikh Mishary";document.getElementById('tafsir').innerText="Sura ya "+s.name+" - Sikiliza kwa sauti ya Sheikh Mishary Rashid Alafasy - BURE 100%";let p=document.getElementById('player');p.src=s.url;p.play();render(document.getElementById('search').value);}
+function next(){if(cur<113)play(cur+1);else play(0);}function prev(){if(cur>0)play(cur-1);else play(113);}
+function filterList(){render(document.getElementById('search').value);}
+render();
+</script>
+</body>
+</html>
