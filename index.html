@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="sw">
 <head>
@@ -7,12 +6,12 @@
 <title>Qur'an Sauti TZ - 114 Sura - Sadaqah</title>
 <style>
 body{margin:0;font-family:system-ui;background:#f6faf7}
-.header{background:#0B6A2B;color:#fff;padding:14px;text-align:center;position:sticky;top:0;z-index:40}
+.header{background:#0B6A2B;color:#fff;padding:14px;text-align:center;position:sticky;top:0;z-index:100}
 .langs{display:flex;gap:6px;justify-content:center;margin-top:8px}
 .langs button{padding:6px 12px;border-radius:20px;border:1px solid #fff;background:rgba(255,255,255,.2);color:#fff;font-weight:800;cursor:pointer}
 .langs button.active{background:#fff;color:#0B6A2B}
 .card{background:#fff;border-radius:16px;padding:14px;margin:12px;box-shadow:0 4px 12px rgba(0,0,0,.06);border-top:4px solid #0B6A2B}
-.card.gold{border-top-color:#D4AF37;background:linear-gradient(#FFFBEB,#fff);border:2px solid #D4AF37;position:sticky;top:85px;z-index:30}
+.card.gold{border-top-color:#D4AF37;background:linear-gradient(#FFFBEB,#fff);border:2px solid #D4AF37}
 .card.premium{border-top-color:#7b1fa2;background:linear-gradient(#F3E5F5,#fff);border:2px solid #7b1fa2}
 .surah{padding:10px;border:1px solid #eee;border-radius:10px;margin-top:6px;display:flex;justify-content:space-between;align-items:center;background:#fafafa}
 .surah.playing{background:#e8f5e9;border:2px solid #0B6A2B;font-weight:700}
@@ -20,6 +19,7 @@ body{margin:0;font-family:system-ui;background:#f6faf7}
 .btn-g{background:#0B6A2B;color:#fff}.btn-y{background:#D4AF37;color:#000}.btn-p{background:#7b1fa2;color:#fff}.btn-w{background:#25D366;color:#fff}
 audio{width:100%;margin-top:8px}
 .walletBox{background:#fff;padding:10px;border-radius:8px;word-break:break-all;font-weight:800;text-align:center;border:1px dashed #7b1fa2;margin:8px 0}
+.playerBar{position:sticky;top:96px;z-index:90;background:#e8f5e9;border:1px solid #0B6A2B}
 </style>
 </head>
 <body>
@@ -38,20 +38,21 @@ audio{width:100%;margin-top:8px}
 <div style="font-size:10px;text-align:center;margin-top:4px" id="sadaqahNote">💡 Qur'an BURE hata usipochangia.</div>
 </div>
 
-<!-- PREMIUM MPYA -->
 <div class="card premium" id="premiumCard">
 <h3>⭐ PREMIUM - Lipia 1 Pi / Mwezi</h3>
 <p style="font-size:12px">Sikiliza bila kikomo + Download Sura kwa offline + Tafsir ya Kiswahili + Hakuna usumbufu. Qur'an ya msingi inabaki BURE 100%.</p>
 <button class="btn btn-p" onclick="onyeshaMalipo('premium')">⭐ Lipia 1 Pi - Fungua Premium</button>
-<div id="malipoBox" style="display:none;margin-top:10px;background:#fff;padding:12px;border-radius:12px;">
+</div>
+
+<div id="malipoBox" style="display:none;margin:12px;background:#fff;padding:14px;border-radius:16px;border:2px solid #7b1fa2;">
 <p style="font-size:13px;margin:0"><b>Hatua 1:</b> Fungua Pi Wallet yako</p>
 <p style="font-size:13px"><b>Hatua 2:</b> Tuma <b id="malipoKiasi">1 Pi</b> kwenda hapa:</p>
-<div class="walletBox" id="walletText">GDGTQ...DU3PS</div>
+<div class="walletBox" id="walletText">GDGTQLHUVG4KHI2GFNQZF4TUMBCMQBJJUJDTZZHPQERR2BGULXCDU3PS</div>
 <button class="btn btn-g" onclick="copyWallet()">📋 Copy Wallet</button>
 <p style="font-size:12px"><b>Hatua 3:</b> Baada ya kutuma, bonyeza hapa chini tuma screenshot ili tukufungulie Premium:</p>
-<a href="https://wa.me/255XXXXXXXXX?text=Nimelipa%20Premium%20Quran%20Sauti%20TZ" target="_blank"><button class="btn btn-w">💬 Nimelipa - Tuma Screenshot WhatsApp</button></a>
+<a id="waLink" href="https://wa.me/255XXXXXXXXX?text=Nimelipa%20Premium%20Quran%20Sauti%20TZ" target="_blank"><button class="btn btn-w">💬 Nimelipa - Tuma Screenshot WhatsApp</button></a>
 <p style="font-size:10px;text-align:center">Utafunguliwa ndani ya dakika chache baada ya kuthibitisha malipo.</p>
-</div>
+<button class="btn" style="background:#eee" onclick="document.getElementById('malipoBox').style.display='none'">✖ Funga</button>
 </div>
 
 <div class="card" style="background:#e8f5e9;border:1px solid #0B6A2B">
@@ -59,9 +60,9 @@ audio{width:100%;margin-top:8px}
 <span style="font-size:11px" id="qariDesc">Sauti kwa Da'wah BURE. Tunamheshimu. Kama hataridhia, TUPO TAYARI KUFUTA ndani ya masaa 24.</span>
 </div>
 
-<div class="card" style="position:sticky;top:320px;z-index:20">
+<div class="card playerBar">
 <b id="now">Chagua Sura - Sura nzima itasoma...</b>
-<audio id="player" controls></audio>
+<audio id="player" controls preload="none"></audio>
 <div style="display:flex;gap:6px"><button class="btn btn-g" style="flex:1" onclick="prev()" id="btnPrev">⏮ Nyuma</button><button class="btn btn-y" style="flex:1" onclick="next()" id="btnNext">⏭ Mbele</button></div>
 <div style="font-size:11px;background:#FFFBEB;padding:8px;border-radius:8px;margin-top:6px" id="tafsir">Sikiliza sauti kamili ya Sheikh Mishary - BURE 100%</div>
 </div>
@@ -69,26 +70,37 @@ audio{width:100%;margin-top:8px}
 <div class="card">
 <h3 id="listTitle">📖 114 Sura ZOTE - Sura Nzima</h3>
 <input id="search" placeholder="Tafuta: Ya-Sin, Kahf, Baqarah..." style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px" oninput="filterList()">
-<div id="list" style="max-height:500px;overflow:auto;margin-top:8px"></div>
+<div id="list" style="max-height:600px;overflow:auto;margin-top:8px"></div>
 </div>
 
 <script>
-const MY_WALLET = "const MY_WALLET = "GDGTQLHUVG4KHI2GFNQZF4TUMBCMQBJJUJDTZZHPQERR2BGULXCDU3PS";
-const MY_WHATSAPP = "255743160924";; // <-- WEKA WALLET YAKO KAMILI HAPA
-const MY_WHATSAPP = "255XXXXXXXXX"; // <-- WEKA NAMBA YAKO YA WHATSAPP HAPA
+const MY_WALLET = "GDGTQLHUVG4KHI2GFNQZF4TUMBCMQBJJUJDTZZHPQERR2BGULXCDU3PS";
+const MY_WHATSAPP = "255XXXXXXXXX";
 function onyeshaMalipo(aina){
   let box = document.getElementById('malipoBox');
   box.style.display = 'block';
   document.getElementById('walletText').innerText = MY_WALLET;
   if(aina=='sadaqah'){
-    document.getElementById('malipoKiasi').innerText = document.getElementById('sAmt').value;
+    let amt = document.getElementById('sAmt').value;
+    let forWhat = document.getElementById('sFor').value;
+    document.getElementById('malipoKiasi').innerText = amt;
+    document.getElementById('waLink').href = "https://wa.me/"+MY_WHATSAPP+"?text="+encodeURIComponent("Nimetuma Sadaqah "+amt+" kwa "+forWhat+" - Quran Sauti TZ");
   } else {
     document.getElementById('malipoKiasi').innerText = '1 Pi';
+    document.getElementById('waLink').href = "https://wa.me/"+MY_WHATSAPP+"?text="+encodeURIComponent("Nimelipa Premium 1 Pi - Quran Sauti TZ");
   }
-  box.scrollIntoView({behavior:'smooth'});
+  box.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function copyWallet(){
-  navigator.clipboard.writeText(MY_WALLET).then(()=>{ alert('Wallet Imecopywa! Nenda Pi Wallet utume.'); });
+  let txt = MY_WALLET;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(()=>{ alert('Wallet Imecopywa! Nenda Pi Wallet utume.'); }).catch(()=>{ fallbackCopy(txt); });
+  } else { fallbackCopy(txt); }
+}
+function fallbackCopy(txt){
+  let ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');alert('Wallet Imecopywa! Nenda Pi Wallet utume.');}catch(e){alert('Copy manually: '+txt);}
+  document.body.removeChild(ta);
 }
 const trans={
 sw:{title:"Qur'an Sauti TZ - 114 Sura Kamili",subtitle:"Sheikh Mishary Rashid Alafasy - BURE 100% - Sura Nzima",sadaqahTitle:"🤲 SADAQAH - Walimu wa MADRASA, Yatima, Wajane",sadaqahDesc:"Unasikiliza Qur'an BURE 114 Sura nzima, lakini Walimu wa MADRASA Dar wanafundisha bila mshahara, Yatima hana daftari, Mjane hana unga. App ni BURE 100%, ukipenda changia Sadaqah HIARI. Allah akulipe! Mtume ﷺ: Mimi na mlea Yatima kama hivi Peponi. 50% MADRASA, 30% Yatima, 20% Wajane - Uwazi 100%",sadaqahBtn:"📖 Changia MADRASA/Yatima (Hiari)",sadaqahNote:"💡 Qur'an BURE hata usipochangia.",qariLabel:"🔊 Msemaji: Sheikh Mishary Rashid Alafasy",qariDesc:"Sauti kwa Da'wah BURE. Tunamheshimu. Kama hataridhia, TUPO TAYARI KUFUTA ndani ya masaa 24.",now:"Chagua Sura - Sura nzima itasoma...",listTitle:"📖 114 Sura ZOTE - Sura Nzima",search:"Tafuta: Ya-Sin, Kahf, Baqarah...",prev:"⏮ Nyuma",next:"⏭ Mbele",tafsir:"Sikiliza sauti kamili ya Sheikh Mishary - BURE 100%"},
@@ -119,7 +131,7 @@ const names=[[1,"Al-Fatiha"],[2,"Al-Baqarah"],[3,"Ali 'Imran"],[4,"An-Nisa"],[5,
 let surahs=names.map(n=>({id:n[0],name:n[0]+". "+n[1],url:`https://server8.mp3quran.net/afs/${String(n[0]).padStart(3,'0')}.mp3`}));
 let cur=0;
 function render(f=""){let c=document.getElementById('list');c.innerHTML="";surahs.forEach((s,i)=>{if(f && !s.name.toLowerCase().includes(f.toLowerCase()))return;let d=document.createElement('div');d.className='surah'+(i==cur?' playing':'');d.innerHTML=`<div><b>${s.name}</b><br><small>${s.id}/114 - Full Surah</small></div><button class="btn btn-g" style="width:auto;padding:6px 14px;margin:0" onclick="play(${i})">▶️</button>`;c.appendChild(d);});}
-function play(i){cur=i;let s=surahs[i];document.getElementById('now').innerText=s.name+" - Full Surah";document.getElementById('tafsir').innerText="Playing: "+s.name+" - Sheikh Mishary - Full";let p=document.getElementById('player');p.src=s.url;p.play();render(document.getElementById('search').value);}
+function play(i){cur=i;let s=surahs[i];document.getElementById('now').innerText=s.name+" - Full Surah";document.getElementById('tafsir').innerText="Playing: "+s.name+" - Sheikh Mishary - Full";let p=document.getElementById('player');p.src=s.url;p.load();p.play().catch(()=>{alert('Bonyeza Play kwenye player hapo juu ili kusikiliza');});render(document.getElementById('search').value);}
 function next(){if(cur<113)play(cur+1);else play(0);}function prev(){if(cur>0)play(cur-1);else play(113);}
 function filterList(){render(document.getElementById('search').value);}
 render();
