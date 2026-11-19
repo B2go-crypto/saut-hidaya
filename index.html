@@ -13,11 +13,13 @@ body{margin:0;font-family:system-ui;background:#f6faf7}
 .langs button.active{background:#fff;color:#0B6A2B}
 .card{background:#fff;border-radius:16px;padding:14px;margin:12px;box-shadow:0 4px 12px rgba(0,0,0,.06);border-top:4px solid #0B6A2B}
 .card.gold{border-top-color:#D4AF37;background:linear-gradient(#FFFBEB,#fff);border:2px solid #D4AF37;position:sticky;top:85px;z-index:30}
+.card.premium{border-top-color:#7b1fa2;background:linear-gradient(#F3E5F5,#fff);border:2px solid #7b1fa2}
 .surah{padding:10px;border:1px solid #eee;border-radius:10px;margin-top:6px;display:flex;justify-content:space-between;align-items:center;background:#fafafa}
 .surah.playing{background:#e8f5e9;border:2px solid #0B6A2B;font-weight:700}
 .btn{width:100%;padding:12px;border:none;border-radius:12px;font-weight:800;margin-top:8px;cursor:pointer}
-.btn-g{background:#0B6A2B;color:#fff}.btn-y{background:#D4AF37;color:#000}
+.btn-g{background:#0B6A2B;color:#fff}.btn-y{background:#D4AF37;color:#000}.btn-p{background:#7b1fa2;color:#fff}.btn-w{background:#25D366;color:#fff}
 audio{width:100%;margin-top:8px}
+.walletBox{background:#fff;padding:10px;border-radius:8px;word-break:break-all;font-weight:800;text-align:center;border:1px dashed #7b1fa2;margin:8px 0}
 </style>
 </head>
 <body>
@@ -32,8 +34,24 @@ audio{width:100%;margin-top:8px}
 <h3 id="sadaqahTitle">🤲 SADAQAH - Walimu wa MADRASA, Yatima, Wajane</h3>
 <p style="font-size:12px" id="sadaqahDesc">Unasikiliza Qur'an BURE 114 Sura nzima, lakini Walimu wa MADRASA Dar wanafundisha bila mshahara, Yatima hana daftari, Mjane hana unga. App ni BURE 100%, ukipenda changia Sadaqah HIARI. Allah akulipe! Mtume ﷺ: Mimi na mlea Yatima kama hivi Peponi. 50% MADRASA, 30% Yatima, 20% Wajane - Uwazi 100%</p>
 <div style="display:flex;gap:6px"><select id="sFor" style="flex:1;padding:10px;border-radius:8px"><option>📖 MADRASA</option><option>👶 Yatima</option><option>🧕 Wajane</option></select><select id="sAmt" style="flex:1;padding:10px;border-radius:8px"><option>1 Pi</option><option selected>2 Pi</option><option>5 Pi</option><option>10 Pi</option></select></div>
-<button class="btn btn-y" id="sadaqahBtn" onclick="alert(document.getElementById('sAmt').value+' Pi - Allah akulipe!')">📖 Changia MADRASA/Yatima (Hiari)</button>
-<div style="font-size:10px;text-align:center;margin-top:4px" id="sadaqahNote">💡 Qur'an BURE hata usipochangia. Wallet: GDYOTJO6...66FO</div>
+<button class="btn btn-y" id="sadaqahBtn" onclick="onyeshaMalipo('sadaqah')">📖 Changia MADRASA/Yatima (Hiari)</button>
+<div style="font-size:10px;text-align:center;margin-top:4px" id="sadaqahNote">💡 Qur'an BURE hata usipochangia.</div>
+</div>
+
+<!-- PREMIUM MPYA -->
+<div class="card premium" id="premiumCard">
+<h3>⭐ PREMIUM - Lipia 1 Pi / Mwezi</h3>
+<p style="font-size:12px">Sikiliza bila kikomo + Download Sura kwa offline + Tafsir ya Kiswahili + Hakuna usumbufu. Qur'an ya msingi inabaki BURE 100%.</p>
+<button class="btn btn-p" onclick="onyeshaMalipo('premium')">⭐ Lipia 1 Pi - Fungua Premium</button>
+<div id="malipoBox" style="display:none;margin-top:10px;background:#fff;padding:12px;border-radius:12px;">
+<p style="font-size:13px;margin:0"><b>Hatua 1:</b> Fungua Pi Wallet yako</p>
+<p style="font-size:13px"><b>Hatua 2:</b> Tuma <b id="malipoKiasi">1 Pi</b> kwenda hapa:</p>
+<div class="walletBox" id="walletText">GDGTQ...DU3PS</div>
+<button class="btn btn-g" onclick="copyWallet()">📋 Copy Wallet</button>
+<p style="font-size:12px"><b>Hatua 3:</b> Baada ya kutuma, bonyeza hapa chini tuma screenshot ili tukufungulie Premium:</p>
+<a href="https://wa.me/255XXXXXXXXX?text=Nimelipa%20Premium%20Quran%20Sauti%20TZ" target="_blank"><button class="btn btn-w">💬 Nimelipa - Tuma Screenshot WhatsApp</button></a>
+<p style="font-size:10px;text-align:center">Utafunguliwa ndani ya dakika chache baada ya kuthibitisha malipo.</p>
+</div>
 </div>
 
 <div class="card" style="background:#e8f5e9;border:1px solid #0B6A2B">
@@ -55,10 +73,26 @@ audio{width:100%;margin-top:8px}
 </div>
 
 <script>
+const MY_WALLET = "GDGTQ...DU3PS"; // <-- WEKA WALLET YAKO KAMILI HAPA
+const MY_WHATSAPP = "255XXXXXXXXX"; // <-- WEKA NAMBA YAKO YA WHATSAPP HAPA
+function onyeshaMalipo(aina){
+  let box = document.getElementById('malipoBox');
+  box.style.display = 'block';
+  document.getElementById('walletText').innerText = MY_WALLET;
+  if(aina=='sadaqah'){
+    document.getElementById('malipoKiasi').innerText = document.getElementById('sAmt').value;
+  } else {
+    document.getElementById('malipoKiasi').innerText = '1 Pi';
+  }
+  box.scrollIntoView({behavior:'smooth'});
+}
+function copyWallet(){
+  navigator.clipboard.writeText(MY_WALLET).then(()=>{ alert('Wallet Imecopywa! Nenda Pi Wallet utume.'); });
+}
 const trans={
-sw:{title:"Qur'an Sauti TZ - 114 Sura Kamili",subtitle:"Sheikh Mishary Rashid Alafasy - BURE 100% - Sura Nzima",sadaqahTitle:"🤲 SADAQAH - Walimu wa MADRASA, Yatima, Wajane",sadaqahDesc:"Unasikiliza Qur'an BURE 114 Sura nzima, lakini Walimu wa MADRASA Dar wanafundisha bila mshahara, Yatima hana daftari, Mjane hana unga. App ni BURE 100%, ukipenda changia Sadaqah HIARI. Allah akulipe! Mtume ﷺ: Mimi na mlea Yatima kama hivi Peponi. 50% MADRASA, 30% Yatima, 20% Wajane - Uwazi 100%",sadaqahBtn:"📖 Changia MADRASA/Yatima (Hiari)",sadaqahNote:"💡 Qur'an BURE hata usipochangia. Wallet: GDYOTJO6...66FO",qariLabel:"🔊 Msemaji: Sheikh Mishary Rashid Alafasy",qariDesc:"Sauti kwa Da'wah BURE. Tunamheshimu. Kama hataridhia, TUPO TAYARI KUFUTA ndani ya masaa 24.",now:"Chagua Sura - Sura nzima itasoma...",listTitle:"📖 114 Sura ZOTE - Sura Nzima",search:"Tafuta: Ya-Sin, Kahf, Baqarah...",prev:"⏮ Nyuma",next:"⏭ Mbele",tafsir:"Sikiliza sauti kamili ya Sheikh Mishary - BURE 100%"},
-en:{title:"Qur'an Voice TZ - 114 Full Surahs",subtitle:"Sheikh Mishary Alafasy - FREE 100% - Full Surah",sadaqahTitle:"🤲 SADAQAH - MADRASA Teachers, Orphans, Widows",sadaqahDesc:"You listen to 114 Surahs FREE, but MADRASA teachers in Dar teach without salary, orphans have no books. App is 100% FREE, if you wish donate optional Sadaqah. Allah reward you! Prophet ﷺ: I and orphan caretaker like this in Paradise. 50% MADRASA, 30% Orphans, 20% Widows - 100% Transparency",sadaqahBtn:"📖 Donate for MADRASA/Orphans (Optional)",sadaqahNote:"💡 Qur'an FREE even without donation. Wallet: GDYOTJO6...66FO",qariLabel:"🔊 Reciter: Sheikh Mishary Rashid Alafasy",qariDesc:"Audio for FREE Da'wah. Respect. If owner objects, WE ARE READY TO REMOVE within 24h.",now:"Choose Surah - Full Surah will play...",listTitle:"📖 114 Surahs - Full",search:"Search: Ya-Sin, Kahf, Baqarah...",prev:"⏮ Prev",next:"⏭ Next",tafsir:"Listen to full Sheikh Mishary - FREE 100%"},
-ar:{title:"القرآن صوت تنزانيا - 114 سورة كاملة",subtitle:"الشيخ مشاري راشد العفاسي - مجانا 100% - سورة كاملة",sadaqahTitle:"🤲 صدقة - معلمي المدارس، الأيتام، الأرامل",sadaqahDesc:"تستمع إلى 114 سورة مجانا، لكن معلمي المدرسة في دار السلام يدرسون بدون راتب، اليتيم بلا دفتر، الأرملة بلا طحين. التطبيق مجاني 100%، إن أحببت تبرع صدقة اختيارية. جزاك الله خيرا! قال النبي ﷺ: أنا وكافل اليتيم كهاتين في الجنة. 50% مدارس، 30% أيتام، 20% أرامل - شفافية 100%",sadaqahBtn:"📖 تبرع للمدارس/الأيتام (اختياري)",sadaqahNote:"💡 القرآن مجاني حتى بدون تبرع. Wallet: GDYOTJO6...66FO",qariLabel:"🔊 القارئ: الشيخ مشاري راشد العفاسي",qariDesc:"الصوت للدعوة مجانا. نحترمه. إذا اعترض المالك، نحن مستعدون للحذف خلال 24 ساعة.",now:"اختر السورة - ستُتلى السورة كاملة...",listTitle:"📖 114 سورة - كاملة",search:"ابحث: يس، الكهف، البقرة...",prev:"⏮ السابق",next:"⏭ التالي",tafsir:"استمع لصوت الشيخ مشاري كاملا - مجانا 100%"}
+sw:{title:"Qur'an Sauti TZ - 114 Sura Kamili",subtitle:"Sheikh Mishary Rashid Alafasy - BURE 100% - Sura Nzima",sadaqahTitle:"🤲 SADAQAH - Walimu wa MADRASA, Yatima, Wajane",sadaqahDesc:"Unasikiliza Qur'an BURE 114 Sura nzima, lakini Walimu wa MADRASA Dar wanafundisha bila mshahara, Yatima hana daftari, Mjane hana unga. App ni BURE 100%, ukipenda changia Sadaqah HIARI. Allah akulipe! Mtume ﷺ: Mimi na mlea Yatima kama hivi Peponi. 50% MADRASA, 30% Yatima, 20% Wajane - Uwazi 100%",sadaqahBtn:"📖 Changia MADRASA/Yatima (Hiari)",sadaqahNote:"💡 Qur'an BURE hata usipochangia.",qariLabel:"🔊 Msemaji: Sheikh Mishary Rashid Alafasy",qariDesc:"Sauti kwa Da'wah BURE. Tunamheshimu. Kama hataridhia, TUPO TAYARI KUFUTA ndani ya masaa 24.",now:"Chagua Sura - Sura nzima itasoma...",listTitle:"📖 114 Sura ZOTE - Sura Nzima",search:"Tafuta: Ya-Sin, Kahf, Baqarah...",prev:"⏮ Nyuma",next:"⏭ Mbele",tafsir:"Sikiliza sauti kamili ya Sheikh Mishary - BURE 100%"},
+en:{title:"Qur'an Voice TZ - 114 Full Surahs",subtitle:"Sheikh Mishary Alafasy - FREE 100% - Full Surah",sadaqahTitle:"🤲 SADAQAH - MADRASA Teachers, Orphans, Widows",sadaqahDesc:"You listen to 114 Surahs FREE, but MADRASA teachers in Dar teach without salary, orphans have no books. App is 100% FREE, if you wish donate optional Sadaqah. Allah reward you! Prophet ﷺ: I and orphan caretaker like this in Paradise. 50% MADRASA, 30% Orphans, 20% Widows - 100% Transparency",sadaqahBtn:"📖 Donate for MADRASA/Orphans (Optional)",sadaqahNote:"💡 Qur'an FREE even without donation.",qariLabel:"🔊 Reciter: Sheikh Mishary Rashid Alafasy",qariDesc:"Audio for FREE Da'wah. Respect. If owner objects, WE ARE READY TO REMOVE within 24h.",now:"Choose Surah - Full Surah will play...",listTitle:"📖 114 Surahs - Full",search:"Search: Ya-Sin, Kahf, Baqarah...",prev:"⏮ Prev",next:"⏭ Next",tafsir:"Listen to full Sheikh Mishary - FREE 100%"},
+ar:{title:"القرآن صوت تنزانيا - 114 سورة كاملة",subtitle:"الشيخ مشاري راشد العفاسي - مجانا 100% - سورة كاملة",sadaqahTitle:"🤲 صدقة - معلمي المدارس، الأيتام، الأرامل",sadaqahDesc:"تستمع إلى 114 سورة مجانا، لكن معلمي المدرسة في دار السلام يدرسون بدون راتب، اليتيم بلا دفتر، الأرملة بلا طحين. التطبيق مجاني 100%، إن أحببت تبرع صدقة اختيارية. جزاك الله خيرا! قال النبي ﷺ: أنا وكافل اليتيم كهاتين في الجنة. 50% مدارس، 30% أيتام، 20% أرامل - شفافية 100%",sadaqahBtn:"📖 تبرع للمدارس/الأيتام (اختياري)",sadaqahNote:"💡 القرآن مجاني حتى بدون تبرع.",qariLabel:"🔊 القارئ: الشيخ مشاري راشد العفاسي",qariDesc:"الصوت للدعوة مجانا. نحترمه. إذا اعترض المالك، نحن مستعدون للحذف خلال 24 ساعة.",now:"اختر السورة - ستُتلى السورة كاملة...",listTitle:"📖 114 سورة - كاملة",search:"ابحث: يس، الكهف، البقرة...",prev:"⏮ السابق",next:"⏭ التالي",tafsir:"استمع لصوت الشيخ مشاري كاملا - مجانا 100%"}
 };
 function setLang(l){
 document.getElementById('b-sw').classList.remove('active');document.getElementById('b-en').classList.remove('active');document.getElementById('b-ar').classList.remove('active');
