@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="sw">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Qur'an Sauti TZ - 114 Sura - Sadaqah</title>
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
 <style>
 body{margin:0;font-family:system-ui;background:#f6faf7}
 .header{background:#0B6A2B;color:#fff;padding:14px;text-align:center;position:sticky;top:0;z-index:100}
@@ -13,13 +15,15 @@ body{margin:0;font-family:system-ui;background:#f6faf7}
 .card{background:#fff;border-radius:16px;padding:14px;margin:12px;box-shadow:0 4px 12px rgba(0,0,0,.06);border-top:4px solid #0B6A2B}
 .card.gold{border-top-color:#D4AF37;background:linear-gradient(#FFFBEB,#fff);border:2px solid #D4AF37}
 .card.premium{border-top-color:#7b1fa2;background:linear-gradient(#F3E5F5,#fff);border:2px solid #7b1fa2}
+.card.ayah{border-top-color:#0B6A2B;background:linear-gradient(#E8F5E9,#fff);text-align:center}
 .surah{padding:10px;border:1px solid #eee;border-radius:10px;margin-top:6px;display:flex;justify-content:space-between;align-items:center;background:#fafafa}
 .surah.playing{background:#e8f5e9;border:2px solid #0B6A2B;font-weight:700}
 .btn{width:100%;padding:12px;border:none;border-radius:12px;font-weight:800;margin-top:8px;cursor:pointer}
-.btn-g{background:#0B6A2B;color:#fff}.btn-y{background:#D4AF37;color:#000}.btn-p{background:#7b1fa2;color:#fff}.btn-w{background:#25D366;color:#fff}
+.btn-g{background:#0B6A2B;color:#fff}.btn-y{background:#D4AF37;color:#000}.btn-p{background:#7b1fa2;color:#fff}.btn-w{background:#25D366;color:#fff}.btn-share{background:#0088cc;color:#fff}
 audio{width:100%;margin-top:8px}
 .walletBox{background:#fff;padding:10px;border-radius:8px;word-break:break-all;font-weight:800;text-align:center;border:1px dashed #7b1fa2;margin:8px 0}
 .playerBar{position:sticky;top:96px;z-index:90;background:#e8f5e9;border:1px solid #0B6A2B}
+.premium-badge{background:#7b1fa2;color:#fff;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:800}
 </style>
 </head>
 <body>
@@ -28,6 +32,13 @@ audio{width:100%;margin-top:8px}
 <div style="font-size:11px" id="subtitle">Sheikh Mishary Rashid Alafasy - BURE 100% - Sura Nzima</div>
 <div class="langs"><button id="b-sw" class="active" onclick="setLang('sw')">SW</button><button id="b-en" onclick="setLang('en')">EN</button><button id="b-ar" onclick="setLang('ar')">العربية</button></div>
 <div style="font-size:9px;margin-top:4px">Source: mp3quran.net/afs - Non-commercial - Willing to remove in 24h</div>
+</div>
+
+<div class="card ayah" id="ayahCard">
+<div style="font-size:11px;font-weight:800;color:#0B6A2B" id="ayahTitle">🌙 AYA YA SIKU</div>
+<div style="font-size:16px;font-weight:800;margin:6px 0;line-height:1.6" id="ayahText">وَقُل رَّبِّ زِدْنِي عِلْمًا</div>
+<div style="font-size:12px;color:#444" id="ayahTrans">“Ee Mola wangu, niongezee elimu.” - (Ta-Ha 20:114)</div>
+<button class="btn btn-g" style="width:auto;padding:8px 18px" id="ayahPlayBtn" onclick="play(19)">▶️ Sikiliza Sura ya Leo - Ta-Ha</button>
 </div>
 
 <div class="card gold" id="sadaqahCard">
@@ -39,9 +50,10 @@ audio{width:100%;margin-top:8px}
 </div>
 
 <div class="card premium" id="premiumCard">
-<h3 id="premiumTitle">⭐ PREMIUM - Lipia 1 Pi / Mwezi</h3>
+<h3 id="premiumTitle">⭐ PREMIUM - Lipia 1 Pi / Mwezi <span id="premiumBadge" style="display:none" class="premium-badge">✓ ACTIVE</span></h3>
 <p style="font-size:12px" id="premiumDesc">Sikiliza bila kikomo + Download Sura kwa offline + Tafsir ya Kiswahili + Hakuna usumbufu. Qur'an ya msingi inabaki BURE 100%.</p>
-<button class="btn btn-p" id="premiumBtn" onclick="onyeshaMalipo('premium')">⭐ Lipia 1 Pi - Fungua Premium</button>
+<button class="btn btn-p" id="premiumBtn" onclick="lipiaPremium()">⭐ Lipia 1 Pi - Fungua Premium</button>
+<p style="font-size:10px;text-align:center;margin:6px 0 0" id="premiumHint">Pi Browser: Malipo ya kiotomatiki • Chrome: Copy Wallet + WhatsApp</p>
 </div>
 
 <div id="malipoBox" style="display:none;margin:12px;background:#fff;padding:14px;border-radius:16px;border:2px solid #7b1fa2;">
@@ -65,6 +77,7 @@ audio{width:100%;margin-top:8px}
 <audio id="player" controls preload="none"></audio>
 <div style="display:flex;gap:6px"><button class="btn btn-g" style="flex:1" onclick="prev()" id="btnPrev">⏮ Nyuma</button><button class="btn btn-y" style="flex:1" onclick="next()" id="btnNext">⏭ Mbele</button></div>
 <div style="font-size:11px;background:#FFFBEB;padding:8px;border-radius:8px;margin-top:6px" id="tafsir">Sikiliza sauti kamili ya Sheikh Mishary - BURE 100%</div>
+<button class="btn btn-share" id="shareBtn" onclick="shareApp()">📤 Mwalike Rafiki - Pata Thawabu</button>
 </div>
 
 <div class="card">
@@ -76,8 +89,62 @@ audio{width:100%;margin-top:8px}
 <script>
 const MY_WALLET = "GDGTQLHUVG4KHI2GFNQZF4TUMBCMQBJJUJDTZZHPQERR2BGULXCDU3PS";
 const MY_WHATSAPP = "255743160924";
+const APP_URL = "https://saut-hidaya.vercel.app";
 let currentLang = 'sw';
 let lastPayType = 'premium';
+if(window.Pi){ try{ Pi.init({version:"2.0", sandbox:false}); }catch(e){} }
+
+// --- AYA YA SIKU ---
+const ayahs=[
+{ar:"وَقُل رَّبِّ زِدْنِي عِلْمًا",sw:"“Ee Mola wangu, niongezee elimu.” - (Ta-Ha 20:114)",en:"“My Lord, increase me in knowledge.” - (Ta-Ha 20:114)",surah:19,surahName:"Ta-Ha"},
+{ar:"أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",sw:"“Hakika kwa kumdhukuru Mwenyezi Mungu nyoyo zinatulia.” - (Ar-Ra'd 13:28)",en:"“Verily, in the remembrance of Allah do hearts find rest.” - (Ar-Ra'd 13:28)",surah:12,surahName:"Ar-Ra'd"},
+{ar:"إِنَّ مَعَ الْعُسْرِ يُسْرًا",sw:"“Hakika pamoja na dhiki kuna faraja.” - (Ash-Sharh 94:6)",en:"“Indeed, with hardship comes ease.” - (Ash-Sharh 94:6)",surah:93,surahName:"Ash-Sharh"},
+{ar:"وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ",sw:"“Na Mola wenu amesema: Niombeni, nitakuitikieni.” - (Ghafir 40:60)",en:"“And your Lord says: Call upon Me, I will respond to you.” - (Ghafir 40:60)",surah:39,surahName:"Ghafir"},
+{ar:"فَاذْكُرُونِي أَذْكُرْكُمْ",sw:"“Basi nikumbukeni, nitawakumbuka.” - (Al-Baqarah 2:152)",en:"“So remember Me, I will remember you.” - (Al-Baqarah 2:152)",surah:1,surahName:"Al-Baqarah"},
+{ar:"وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا",sw:"“Na yeyote anayemcha Mwenyezi Mungu, Atamjaalia njia ya kutokea.” - (At-Talaq 65:2)",en:"“Whoever fears Allah, He will make a way out for him.” - (At-Talaq 65:2)",surah:64,surahName:"At-Talaq"},
+{ar:"رَبِّ اشْرَحْ لِي صَدْرِي",sw:"“Ee Mola wangu, nitanulie kifua changu.” - (Ta-Ha 20:25)",en:"“My Lord, expand my chest for me.” - (Ta-Ha 20:25)",surah:19,surahName:"Ta-Ha"}
+];
+function showAyah(){
+  let day = new Date().getDate();
+  let a = ayahs[day % ayahs.length];
+  document.getElementById('ayahText').innerText = a.ar;
+  document.getElementById('ayahTrans').innerText = currentLang=='en'?a.en:currentLang=='ar'?a.ar+" - "+a.surahName:a.sw;
+  let btn = document.getElementById('ayahPlayBtn');
+  btn.onclick = ()=>play(a.surah);
+  btn.innerText = currentLang=='ar'?"▶️ استمع لسورة اليوم - "+a.surahName:currentLang=='en'?"▶️ Listen to Today's Surah - "+a.surahName:"▶️ Sikiliza Sura ya Leo - "+a.surahName;
+  window._todaySurah = a.surah;
+}
+function shareApp(){
+  let msg = currentLang=='ar'?"استمع للقرآن كاملا مجانا - 114 سورة بصوت مشاري العفاسي 🕌 "+APP_URL:currentLang=='en'?"Listen to full Qur'an FREE - 114 Surahs by Mishary Alafasy 🕌 "+APP_URL:"Sikiliza Qur'an Kamili BURE - Sura 114 na Sheikh Mishary 🕌 "+APP_URL;
+  if(navigator.share){ navigator.share({title:"Qur'an Sauti TZ", text:msg, url:APP_URL}).catch(()=>{}); }
+  else { window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank"); }
+}
+function checkPremium(){
+  if(localStorage.getItem('quran_premium')=='1'){
+    document.getElementById('premiumBadge').style.display='inline-block';
+    document.getElementById('premiumBtn').innerText = currentLang=='ar'?"✓ بريميوم مفعّل":currentLang=='en'?"✓ Premium Active":"✓ Premium Imeshafunguka";
+  }
+}
+function unlockPremium(){
+  localStorage.setItem('quran_premium','1');
+  checkPremium();
+  alert(currentLang=='ar'?"مبارك! تم فتح بريميوم ✅":currentLang=='en'?"Mabrook! Premium Unlocked ✅":"Hongera! Premium Imefunguka ✅");
+}
+async function lipiaPremium(){
+  if(window.Pi && window.Pi.createPayment){
+    try{
+      await Pi.authenticate(['payments'], ()=>{});
+      Pi.createPayment({amount:1, memo:"Quran Sauti TZ Premium - 1 Pi / Month", metadata:{type:"premium"}}, {
+        onReadyForServerApproval: (paymentId)=>{ console.log("approve",paymentId); },
+        onReadyForServerCompletion: (paymentId, txid)=>{ unlockPremium(); },
+        onCancel: (paymentId)=>{},
+        onError: (error, payment)=>{ onyeshaMalipo('premium'); }
+      });
+      return;
+    }catch(e){ onyeshaMalipo('premium'); return; }
+  }
+  onyeshaMalipo('premium');
+}
 function onyeshaMalipo(aina){
   lastPayType = aina;
   let box = document.getElementById('malipoBox');
@@ -106,9 +173,9 @@ function fallbackCopy(txt){
   document.body.removeChild(ta);
 }
 const trans={
-sw:{title:"Qur'an Sauti TZ - 114 Sura Kamili",subtitle:"Sheikh Mishary Rashid Alafasy - BURE 100% - Sura Nzima",sadaqahTitle:"🤲 SADAQAH - Walimu wa MADRASA, Yatima, Wajane",sadaqahDesc:"Unasikiliza Qur'an BURE 114 Sura nzima, lakini Walimu wa MADRASA Dar wanafundisha bila mshahara, Yatima hana daftari, Mjane hana unga. App ni BURE 100%, ukipenda changia Sadaqah HIARI. Allah akulipe! Mtume ﷺ: Mimi na mlea Yatima kama hivi Peponi. 50% MADRASA, 30% Yatima, 20% Wajane - Uwazi 100%",sadaqahBtn:"📖 Changia MADRASA/Yatima (Hiari)",sadaqahNote:"💡 Qur'an BURE hata usipochangia.",premiumTitle:"⭐ PREMIUM - Lipia 1 Pi / Mwezi",premiumDesc:"Sikiliza bila kikomo + Download Sura kwa offline + Tafsir ya Kiswahili + Hakuna usumbufu. Qur'an ya msingi inabaki BURE 100%.",premiumBtn:"⭐ Lipia 1 Pi - Fungua Premium",step1:"Hatua 1: Fungua Pi Wallet yako",step2:"Hatua 2: Tuma",step2b:"kwenda hapa:",copyBtn:"📋 Copy Wallet",step3:"Hatua 3: Baada ya kutuma, bonyeza hapa chini tuma screenshot ili tukufungulie Premium:",waBtn:"💬 Nimelipa - Tuma Screenshot WhatsApp",malipoNote:"Utafunguliwa ndani ya dakika chache baada ya kuthibitisha malipo.",closeBtn:"✖ Funga",opts:["📖 MADRASA","👶 Yatima","🧕 Wajane"],qariLabel:"🔊 Msemaji: Sheikh Mishary Rashid Alafasy",qariDesc:"Sauti kwa Da'wah BURE. Tunamheshimu. Kama hataridhia, TUPO TAYARI KUFUTA ndani ya masaa 24.",now:"Chagua Sura - Sura nzima itasoma...",listTitle:"📖 114 Sura ZOTE - Sura Nzima",search:"Tafuta: Ya-Sin, Kahf, Baqarah...",prev:"⏮ Nyuma",next:"⏭ Mbele",tafsir:"Sikiliza sauti kamili ya Sheikh Mishary - BURE 100%",playing:"Inacheza:"},
-en:{title:"Qur'an Voice TZ - 114 Full Surahs",subtitle:"Sheikh Mishary Alafasy - FREE 100% - Full Surah",sadaqahTitle:"🤲 SADAQAH - MADRASA Teachers, Orphans, Widows",sadaqahDesc:"You listen to 114 Surahs FREE, but MADRASA teachers in Dar teach without salary, orphans have no books. App is 100% FREE, if you wish donate optional Sadaqah. Allah reward you! Prophet ﷺ: I and orphan caretaker like this in Paradise. 50% MADRASA, 30% Orphans, 20% Widows - 100% Transparency",sadaqahBtn:"📖 Donate for MADRASA/Orphans (Optional)",sadaqahNote:"💡 Qur'an FREE even without donation.",premiumTitle:"⭐ PREMIUM - Pay 1 Pi / Month",premiumDesc:"Listen unlimited + Download Surah for offline + Swahili Tafsir + No interruptions. Basic Qur'an stays FREE 100%.",premiumBtn:"⭐ Pay 1 Pi - Unlock Premium",step1:"Step 1: Open your Pi Wallet",step2:"Step 2: Send",step2b:"to here:",copyBtn:"📋 Copy Wallet",step3:"Step 3: After sending, press below to send screenshot so we unlock Premium:",waBtn:"💬 I Paid - Send Screenshot WhatsApp",malipoNote:"You will be unlocked within minutes after confirming payment.",closeBtn:"✖ Close",opts:["📖 MADRASA","👶 Orphans","🧕 Widows"],qariLabel:"🔊 Reciter: Sheikh Mishary Rashid Alafasy",qariDesc:"Audio for FREE Da'wah. Respect. If owner objects, WE ARE READY TO REMOVE within 24h.",now:"Choose Surah - Full Surah will play...",listTitle:"📖 114 Surahs - Full",search:"Search: Ya-Sin, Kahf, Baqarah...",prev:"⏮ Prev",next:"⏭ Next",tafsir:"Listen to full Sheikh Mishary - FREE 100%",playing:"Playing:"},
-ar:{title:"القرآن صوت تنزانيا - 114 سورة كاملة",subtitle:"الشيخ مشاري راشد العفاسي - مجانا 100% - سورة كاملة",sadaqahTitle:"🤲 صدقة - معلمي المدارس، الأيتام، الأرامل",sadaqahDesc:"تستمع إلى 114 سورة مجانا، لكن معلمي المدرسة في دار السلام يدرسون بدون راتب، اليتيم بلا دفتر، الأرملة بلا طحين. التطبيق مجاني 100%، إن أحببت تبرع صدقة اختيارية. جزاك الله خيرا! قال النبي ﷺ: أنا وكافل اليتيم كهاتين في الجنة. 50% مدارس، 30% أيتام، 20% أرامل - شفافية 100%",sadaqahBtn:"📖 تبرع للمدارس/الأيتام (اختياري)",sadaqahNote:"💡 القرآن مجاني حتى بدون تبرع.",premiumTitle:"⭐ بريميوم - ادفع 1 باي / شهريا",premiumDesc:"استمع بلا حدود + حمّل السورة للاستماع بدون إنترنت + تفسير بالسواحيلية + بدون إزعاج. القرآن الأساسي يبقى مجانا 100%.",premiumBtn:"⭐ ادفع 1 باي - افتح بريميوم",step1:"الخطوة 1: افتح محفظة باي الخاصة بك",step2:"الخطوة 2: أرسل",step2b:"إلى هنا:",copyBtn:"📋 نسخ المحفظة",step3:"الخطوة 3: بعد الإرسال، اضغط بالأسفل لإرسال لقطة شاشة لنفتح لك بريميوم:",waBtn:"💬 لقد دفعت - أرسل لقطة شاشة واتساب",malipoNote:"سيتم فتح حسابك خلال دقائق بعد تأكيد الدفع.",closeBtn:"✖ إغلاق",opts:["📖 مدرسة","👶 أيتام","🧕 أرامل"],qariLabel:"🔊 القارئ: الشيخ مشاري راشد العفاسي",qariDesc:"الصوت للدعوة مجانا. نحترمه. إذا اعترض المالك، نحن مستعدون للحذف خلال 24 ساعة.",now:"اختر السورة - ستُتلى السورة كاملة...",listTitle:"📖 114 سورة - كاملة",search:"ابحث: يس، الكهف، البقرة...",prev:"⏮ السابق",next:"⏭ التالي",tafsir:"استمع لصوت الشيخ مشاري كاملا - مجانا 100%",playing:"يُشغّل الآن:"}
+sw:{title:"Qur'an Sauti TZ - 114 Sura Kamili",subtitle:"Sheikh Mishary Rashid Alafasy - BURE 100% - Sura Nzima",ayahTitle:"🌙 AYA YA SIKU",sadaqahTitle:"🤲 SADAQAH - Walimu wa MADRASA, Yatima, Wajane",sadaqahDesc:"Unasikiliza Qur'an BURE 114 Sura nzima, lakini Walimu wa MADRASA Dar wanafundisha bila mshahara, Yatima hana daftari, Mjane hana unga. App ni BURE 100%, ukipenda changia Sadaqah HIARI. Allah akulipe! Mtume ﷺ: Mimi na mlea Yatima kama hivi Peponi. 50% MADRASA, 30% Yatima, 20% Wajane - Uwazi 100%",sadaqahBtn:"📖 Changia MADRASA/Yatima (Hiari)",sadaqahNote:"💡 Qur'an BURE hata usipochangia.",premiumTitle:"⭐ PREMIUM - Lipia 1 Pi / Mwezi",premiumDesc:"Sikiliza bila kikomo + Download Sura kwa offline + Tafsir ya Kiswahili + Hakuna usumbufu. Qur'an ya msingi inabaki BURE 100%.",premiumBtn:"⭐ Lipia 1 Pi - Fungua Premium",premiumHint:"Pi Browser: Malipo ya kiotomatiki • Chrome: Copy Wallet + WhatsApp",step1:"Hatua 1: Fungua Pi Wallet yako",step2:"Hatua 2: Tuma",step2b:"kwenda hapa:",copyBtn:"📋 Copy Wallet",step3:"Hatua 3: Baada ya kutuma, bonyeza hapa chini tuma screenshot ili tukufungulie Premium:",waBtn:"💬 Nimelipa - Tuma Screenshot WhatsApp",malipoNote:"Utafunguliwa ndani ya dakika chache baada ya kuthibitisha malipo.",closeBtn:"✖ Funga",opts:["📖 MADRASA","👶 Yatima","🧕 Wajane"],qariLabel:"🔊 Msemaji: Sheikh Mishary Rashid Alafasy",qariDesc:"Sauti kwa Da'wah BURE. Tunamheshimu. Kama hataridhia, TUPO TAYARI KUFUTA ndani ya masaa 24.",now:"Chagua Sura - Sura nzima itasoma...",listTitle:"📖 114 Sura ZOTE - Sura Nzima",search:"Tafuta: Ya-Sin, Kahf, Baqarah...",prev:"⏮ Nyuma",next:"⏭ Mbele",tafsir:"Sikiliza sauti kamili ya Sheikh Mishary - BURE 100%",playing:"Inacheza:",shareBtn:"📤 Mwalike Rafiki - Pata Thawabu"},
+en:{title:"Qur'an Voice TZ - 114 Full Surahs",subtitle:"Sheikh Mishary Alafasy - FREE 100% - Full Surah",ayahTitle:"🌙 VERSE OF THE DAY",sadaqahTitle:"🤲 SADAQAH - MADRASA Teachers, Orphans, Widows",sadaqahDesc:"You listen to 114 Surahs FREE, but MADRASA teachers in Dar teach without salary, orphans have no books. App is 100% FREE, if you wish donate optional Sadaqah. Allah reward you! Prophet ﷺ: I and orphan caretaker like this in Paradise. 50% MADRASA, 30% Orphans, 20% Widows - 100% Transparency",sadaqahBtn:"📖 Donate for MADRASA/Orphans (Optional)",sadaqahNote:"💡 Qur'an FREE even without donation.",premiumTitle:"⭐ PREMIUM - Pay 1 Pi / Month",premiumDesc:"Listen unlimited + Download Surah for offline + Swahili Tafsir + No interruptions. Basic Qur'an stays FREE 100%.",premiumBtn:"⭐ Pay 1 Pi - Unlock Premium",premiumHint:"Pi Browser: Automatic payment • Chrome: Copy Wallet + WhatsApp",step1:"Step 1: Open your Pi Wallet",step2:"Step 2: Send",step2b:"to here:",copyBtn:"📋 Copy Wallet",step3:"Step 3: After sending, press below to send screenshot so we unlock Premium:",waBtn:"💬 I Paid - Send Screenshot WhatsApp",malipoNote:"You will be unlocked within minutes after confirming payment.",closeBtn:"✖ Close",opts:["📖 MADRASA","👶 Orphans","🧕 Widows"],qariLabel:"🔊 Reciter: Sheikh Mishary Rashid Alafasy",qariDesc:"Audio for FREE Da'wah. Respect. If owner objects, WE ARE READY TO REMOVE within 24h.",now:"Choose Surah - Full Surah will play...",listTitle:"📖 114 Surahs - Full",search:"Search: Ya-Sin, Kahf, Baqarah...",prev:"⏮ Prev",next:"⏭ Next",tafsir:"Listen to full Sheikh Mishary - FREE 100%",playing:"Playing:",shareBtn:"📤 Invite a Friend - Earn Reward"},
+ar:{title:"القرآن صوت تنزانيا - 114 سورة كاملة",subtitle:"الشيخ مشاري راشد العفاسي - مجانا 100% - سورة كاملة",ayahTitle:"🌙 آية اليوم",sadaqahTitle:"🤲 صدقة - معلمي المدارس، الأيتام، الأرامل",sadaqahDesc:"تستمع إلى 114 سورة مجانا، لكن معلمي المدرسة في دار السلام يدرسون بدون راتب، اليتيم بلا دفتر، الأرملة بلا طحين. التطبيق مجاني 100%، إن أحببت تبرع صدقة اختيارية. جزاك الله خيرا! قال النبي ﷺ: أنا وكافل اليتيم كهاتين في الجنة. 50% مدارس، 30% أيتام، 20% أرامل - شفافية 100%",sadaqahBtn:"📖 تبرع للمدارس/الأيتام (اختياري)",sadaqahNote:"💡 القرآن مجاني حتى بدون تبرع.",premiumTitle:"⭐ بريميوم - ادفع 1 باي / شهريا",premiumDesc:"استمع بلا حدود + حمّل السورة للاستماع بدون إنترنت + تفسير بالسواحيلية + بدون إزعاج. القرآن الأساسي يبقى مجانا 100%.",premiumBtn:"⭐ ادفع 1 باي - افتح بريميوم",premiumHint:"متصفح باي: دفع تلقائي • كروم: نسخ المحفظة + واتساب",step1:"الخطوة 1: افتح محفظة باي الخاصة بك",step2:"الخطوة 2: أرسل",step2b:"إلى هنا:",copyBtn:"📋 نسخ المحفظة",step3:"الخطوة 3: بعد الإرسال، اضغط بالأسفل لإرسال لقطة شاشة لنفتح لك بريميوم:",waBtn:"💬 لقد دفعت - أرسل لقطة شاشة واتساب",malipoNote:"سيتم فتح حسابك خلال دقائق بعد تأكيد الدفع.",closeBtn:"✖ إغلاق",opts:["📖 مدرسة","👶 أيتام","🧕 أرامل"],qariLabel:"🔊 القارئ: الشيخ مشاري راشد العفاسي",qariDesc:"الصوت للدعوة مجانا. نحترمه. إذا اعترض المالك، نحن مستعدون للحذف خلال 24 ساعة.",now:"اختر السورة - ستُتلى السورة كاملة...",listTitle:"📖 114 سورة - كاملة",search:"ابحث: يس، الكهف، البقرة...",prev:"⏮ السابق",next:"⏭ التالي",tafsir:"استمع لصوت الشيخ مشاري كاملا - مجانا 100%",playing:"يُشغّل الآن:",shareBtn:"📤 ادع صديقا - اكسب أجرا"}
 };
 function setLang(l){
 currentLang=l;
@@ -117,13 +184,15 @@ document.getElementById('b-'+l).classList.add('active');
 let t=trans[l];
 document.getElementById('title').innerText=t.title;
 document.getElementById('subtitle').innerText=t.subtitle;
+document.getElementById('ayahTitle').innerText=t.ayahTitle;
 document.getElementById('sadaqahTitle').innerText=t.sadaqahTitle;
 document.getElementById('sadaqahDesc').innerText=t.sadaqahDesc;
 document.getElementById('sadaqahBtn').innerText=t.sadaqahBtn;
 document.getElementById('sadaqahNote').innerText=t.sadaqahNote;
-document.getElementById('premiumTitle').innerText=t.premiumTitle;
+document.getElementById('premiumTitle').childNodes[0].textContent=t.premiumTitle+" ";
 document.getElementById('premiumDesc').innerText=t.premiumDesc;
-document.getElementById('premiumBtn').innerText=t.premiumBtn;
+if(localStorage.getItem('quran_premium')!='1') document.getElementById('premiumBtn').innerText=t.premiumBtn;
+document.getElementById('premiumHint').innerText=t.premiumHint;
 document.getElementById('step1').innerText=t.step1;
 document.getElementById('step2').innerText=t.step2;
 document.getElementById('step2b').innerText=t.step2b;
@@ -143,6 +212,8 @@ document.getElementById('listTitle').innerText=t.listTitle;
 document.getElementById('search').placeholder=t.search;
 document.getElementById('btnPrev').innerText=t.prev;
 document.getElementById('btnNext').innerText=t.next;
+document.getElementById('shareBtn').innerText=t.shareBtn;
+showAyah();
 if(l=='ar')document.body.style.direction='rtl';else document.body.style.direction='ltr';
 }
 const names=[[1,"Al-Fatiha"],[2,"Al-Baqarah"],[3,"Ali 'Imran"],[4,"An-Nisa"],[5,"Al-Ma'idah"],[6,"Al-An'am"],[7,"Al-A'raf"],[8,"Al-Anfal"],[9,"At-Tawbah"],[10,"Yunus"],[11,"Hud"],[12,"Yusuf"],[13,"Ar-Ra'd"],[14,"Ibrahim"],[15,"Al-Hijr"],[16,"An-Nahl"],[17,"Al-Isra"],[18,"Al-Kahf"],[19,"Maryam"],[20,"Ta-Ha"],[21,"Al-Anbiya"],[22,"Al-Hajj"],[23,"Al-Mu'minun"],[24,"An-Nur"],[25,"Al-Furqan"],[26,"Ash-Shu'ara"],[27,"An-Naml"],[28,"Al-Qasas"],[29,"Al-Ankabut"],[30,"Ar-Rum"],[31,"Luqman"],[32,"As-Sajdah"],[33,"Al-Ahzab"],[34,"Saba"],[35,"Fatir"],[36,"Ya-Sin"],[37,"As-Saffat"],[38,"Sad"],[39,"Az-Zumar"],[40,"Ghafir"],[41,"Fussilat"],[42,"Ash-Shura"],[43,"Az-Zukhruf"],[44,"Ad-Dukhan"],[45,"Al-Jathiyah"],[46,"Al-Ahqaf"],[47,"Muhammad"],[48,"Al-Fath"],[49,"Al-Hujurat"],[50,"Qaf"],[51,"Adh-Dhariyat"],[52,"At-Tur"],[53,"An-Najm"],[54,"Al-Qamar"],[55,"Ar-Rahman"],[56,"Al-Waqi'ah"],[57,"Al-Hadid"],[58,"Al-Mujadila"],[59,"Al-Hashr"],[60,"Al-Mumtahanah"],[61,"As-Saf"],[62,"Al-Jumu'ah"],[63,"Al-Munafiqun"],[64,"At-Taghabun"],[65,"At-Talaq"],[66,"At-Tahrim"],[67,"Al-Mulk"],[68,"Al-Qalam"],[69,"Al-Haqqah"],[70,"Al-Ma'arij"],[71,"Nuh"],[72,"Al-Jinn"],[73,"Al-Muzzammil"],[74,"Al-Muddathir"],[75,"Al-Qiyamah"],[76,"Al-Insan"],[77,"Al-Mursalat"],[78,"An-Naba"],[79,"An-Nazi'at"],[80,"Abasa"],[81,"At-Takwir"],[82,"Al-Infitar"],[83,"Al-Mutaffifin"],[84,"Al-Inshiqaq"],[85,"Al-Buruj"],[86,"At-Tariq"],[87,"Al-A'la"],[88,"Al-Ghashiyah"],[89,"Al-Fajr"],[90,"Al-Balad"],[91,"Ash-Shams"],[92,"Al-Lail"],[93,"Ad-Duha"],[94,"Ash-Sharh"],[95,"At-Tin"],[96,"Al-Alaq"],[97,"Al-Qadr"],[98,"Al-Bayyinah"],[99,"Az-Zalzalah"],[100,"Al-Adiyat"],[101,"Al-Qari'ah"],[102,"At-Takathur"],[103,"Al-Asr"],[104,"Al-Humazah"],[105,"Al-Fil"],[106,"Quraysh"],[107,"Al-Ma'un"],[108,"Al-Kawthar"],[109,"Al-Kafirun"],[110,"An-Nasr"],[111,"Al-Masad"],[112,"Al-Ikhlas"],[113,"Al-Falaq"],[114,"An-Nas"]];
@@ -152,7 +223,7 @@ function render(f=""){let c=document.getElementById('list');c.innerHTML="";surah
 function play(i){cur=i;hasPlayed=true;let s=surahs[i];let t=trans[currentLang];document.getElementById('now').innerText=s.name+" - Full Surah";document.getElementById('tafsir').innerText=t.playing+" "+s.name+" - Sheikh Mishary - Full";let p=document.getElementById('player');p.src=s.url;p.load();p.play().catch(()=>{alert(currentLang=='ar'?'اضغط تشغيل في المشغل بالأعلى للاستماع':currentLang=='en'?'Press Play on the player above to listen':'Bonyeza Play kwenye player hapo juu ili kusikiliza');});render(document.getElementById('search').value);}
 function next(){if(cur<113)play(cur+1);else play(0);}function prev(){if(cur>0)play(cur-1);else play(113);}
 function filterList(){render(document.getElementById('search').value);}
-render();
+render(); showAyah(); checkPremium();
 </script>
 </body>
 </html>
