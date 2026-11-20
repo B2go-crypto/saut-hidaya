@@ -50,7 +50,7 @@ audio{width:100%;margin-top:8px}
 </div>
 
 <div class="card premium" id="premiumCard">
-<h3 id="premiumTitle">⭐ PREMIUM - Lipia 1 Pi / Mwezi <span id="premiumBadge" style="display:none" class="premium-badge">✓ ACTIVE</span></h3>
+<h3><span id="premiumTitle">⭐ PREMIUM - Lipia 1 Pi / Mwezi</span> <span id="premiumBadge" style="display:none" class="premium-badge">✓ ACTIVE</span></h3>
 <p style="font-size:12px" id="premiumDesc">Sikiliza bila kikomo + Download Sura kwa offline + Tafsir ya Kiswahili + Hakuna usumbufu. Qur'an ya msingi inabaki BURE 100%.</p>
 <button class="btn btn-p" id="premiumBtn" onclick="lipiaPremium()">⭐ Lipia 1 Pi - Fungua Premium</button>
 <p style="font-size:10px;text-align:center;margin:6px 0 0" id="premiumHint">Pi Browser: Malipo ya kiotomatiki • Chrome: Copy Wallet + WhatsApp</p>
@@ -92,9 +92,16 @@ const MY_WHATSAPP = "255743160924";
 const APP_URL = "https://saut-hidaya.vercel.app";
 let currentLang = 'sw';
 let lastPayType = 'premium';
-if(window.Pi){ try{ Pi.init({version:"2.0", sandbox:false}); }catch(e){} }
 
-// --- AYA YA SIKU ---
+// FIX: Usijaribu Pi SDK kama hauko Pi Browser kabisa
+function isPiBrowser(){
+  try{
+    let ua = navigator.userAgent || "";
+    return ua.includes("PiBrowser") || ua.includes("Pi Browser") || (window.Pi && window.Pi.native);
+  }catch(e){ return false; }
+}
+try{ if(window.Pi && isPiBrowser()){ Pi.init({version:"2.0", sandbox:false}); } }catch(e){}
+
 const ayahs=[
 {ar:"وَقُل رَّبِّ زِدْنِي عِلْمًا",sw:"“Ee Mola wangu, niongezee elimu.” - (Ta-Ha 20:114)",en:"“My Lord, increase me in knowledge.” - (Ta-Ha 20:114)",surah:19,surahName:"Ta-Ha"},
 {ar:"أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",sw:"“Hakika kwa kumdhukuru Mwenyezi Mungu nyoyo zinatulia.” - (Ar-Ra'd 13:28)",en:"“Verily, in the remembrance of Allah do hearts find rest.” - (Ar-Ra'd 13:28)",surah:12,surahName:"Ar-Ra'd"},
@@ -112,7 +119,6 @@ function showAyah(){
   let btn = document.getElementById('ayahPlayBtn');
   btn.onclick = ()=>play(a.surah);
   btn.innerText = currentLang=='ar'?"▶️ استمع لسورة اليوم - "+a.surahName:currentLang=='en'?"▶️ Listen to Today's Surah - "+a.surahName:"▶️ Sikiliza Sura ya Leo - "+a.surahName;
-  window._todaySurah = a.surah;
 }
 function shareApp(){
   let msg = currentLang=='ar'?"استمع للقرآن كاملا مجانا - 114 سورة بصوت مشاري العفاسي 🕌 "+APP_URL:currentLang=='en'?"Listen to full Qur'an FREE - 114 Surahs by Mishary Alafasy 🕌 "+APP_URL:"Sikiliza Qur'an Kamili BURE - Sura 114 na Sheikh Mishary 🕌 "+APP_URL;
@@ -130,20 +136,25 @@ function unlockPremium(){
   checkPremium();
   alert(currentLang=='ar'?"مبارك! تم فتح بريميوم ✅":currentLang=='en'?"Mabrook! Premium Unlocked ✅":"Hongera! Premium Imefunguka ✅");
 }
-async function lipiaPremium(){
-  if(window.Pi && window.Pi.createPayment){
-    try{
-      await Pi.authenticate(['payments'], ()=>{});
-      Pi.createPayment({amount:1, memo:"Quran Sauti TZ Premium - 1 Pi / Month", metadata:{type:"premium"}}, {
-        onReadyForServerApproval: (paymentId)=>{ console.log("approve",paymentId); },
-        onReadyForServerCompletion: (paymentId, txid)=>{ unlockPremium(); },
-        onCancel: (paymentId)=>{},
-        onError: (error, payment)=>{ onyeshaMalipo('premium'); }
-      });
-      return;
-    }catch(e){ onyeshaMalipo('premium'); return; }
+function lipiaPremium(){
+  // FIX KUBWA: Kama si Pi Browser, fungua Malipo Box moja kwa moja, usijaribu Pi SDK kabisa
+  if(!isPiBrowser()){
+    onyeshaMalipo('premium');
+    return;
   }
-  onyeshaMalipo('premium');
+  // Uko Pi Browser tu ndio jaribu Pi SDK, na ikishindwa ndani ya sekunde 3, rudi kwenye Malipo Box
+  let fallback = setTimeout(()=>{ onyeshaMalipo('premium'); }, 3000);
+  try{
+    Pi.authenticate(['payments'], ()=>{}).then(()=>{
+      clearTimeout(fallback);
+      Pi.createPayment({amount:1, memo:"Quran Sauti TZ Premium - 1 Pi / Month", metadata:{type:"premium"}}, {
+        onReadyForServerApproval: (paymentId)=>{},
+        onReadyForServerCompletion: (paymentId, txid)=>{ unlockPremium(); },
+        onCancel: ()=>{ onyeshaMalipo('premium'); },
+        onError: ()=>{ onyeshaMalipo('premium'); }
+      });
+    }).catch(()=>{ clearTimeout(fallback); onyeshaMalipo('premium'); });
+  }catch(e){ clearTimeout(fallback); onyeshaMalipo('premium'); }
 }
 function onyeshaMalipo(aina){
   lastPayType = aina;
@@ -189,7 +200,7 @@ document.getElementById('sadaqahTitle').innerText=t.sadaqahTitle;
 document.getElementById('sadaqahDesc').innerText=t.sadaqahDesc;
 document.getElementById('sadaqahBtn').innerText=t.sadaqahBtn;
 document.getElementById('sadaqahNote').innerText=t.sadaqahNote;
-document.getElementById('premiumTitle').childNodes[0].textContent=t.premiumTitle+" ";
+document.getElementById('premiumTitle').innerText=t.premiumTitle;
 document.getElementById('premiumDesc').innerText=t.premiumDesc;
 if(localStorage.getItem('quran_premium')!='1') document.getElementById('premiumBtn').innerText=t.premiumBtn;
 document.getElementById('premiumHint').innerText=t.premiumHint;
